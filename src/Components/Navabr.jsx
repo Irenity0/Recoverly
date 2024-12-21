@@ -1,16 +1,28 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Tooltip } from 'react-tooltip';
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import ThemeToggle from "./ThemeToggle";
 import AuthContext from "../context/AuthContext";
+import useAxiosSecure from "../hooks/UseAxiosSecure";
 
 const Navbar = () => {
     const { user, logOut } = useContext(AuthContext);
     const [mongoUser, setMongoUser] = useState(null);
+    const axiosSecure = useAxiosSecure();
+
+    useEffect(() => {
+      if (user?.email) {
+        axiosSecure
+          .get(`/users/${user.email}`)
+          .then((res) => setMongoUser(res.data))
+          .catch((error) => console.error("Error fetching MongoDB user:", error));
+      }
+    }, [user]);
+    
 
     const avatarURL = user?.photoURL || mongoUser?.photo || "https://via.placeholder.com/150";
-    const displayName = user?.displayName || mongoUser?.name || "User";
+    const displayname = user?.displayName || mongoUser?.name || "User";
 
     const handleLogout = () => {
         logOut()
@@ -70,7 +82,7 @@ const Navbar = () => {
                         {/* Avatar dropdown */}
                         <div className="avatar dropdown">
                             <button tabIndex={0} className="w-14 h-14 rounded-full">
-                                <img className="rounded-full" src={avatarURL} alt={displayName} />
+                                <img className="rounded-full" src={avatarURL} alt={displayname} />
                             </button>
                             {/* Dropdown content */}
                             <ul className="menu dropdown-content bg-base-100 rounded-box z-[99] w-52 p-2 shadow">

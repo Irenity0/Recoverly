@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthContext from "../context/AuthContext";
+import useAxiosSecure from "../hooks/UseAxiosSecure";
 
 const RegisterPage = () => {
   const { createUser, handleGoogleSignIn } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
+  const axiosSecure = useAxiosSecure();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,6 +32,25 @@ const RegisterPage = () => {
 
           toast.success("Registered Successfully! 🎉");
 
+          const newUser = { name, email, photo };
+
+          // Save new user info to the database using axios
+          axiosSecure
+            .post("/users", newUser, {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+            .then((response) => {
+              if (response.data.insertedId) {
+                console.log("User created in database");
+              }
+              navigate("/"); // Redirect after successful registration
+            })
+            .catch((error) => {
+              console.error("Error saving user to the database:", error);
+              toast.error("Error saving user info. Please try again.");
+            });
         })
         .catch((error) => {
           console.error("Error:", error);
