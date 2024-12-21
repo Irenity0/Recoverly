@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Tooltip } from 'react-tooltip'
 import { FaMagnifyingGlass } from "react-icons/fa6";
+import ThemeToggle from "./ThemeToggle";
 
 
 
@@ -32,7 +33,8 @@ const Navbar = () => {
             <li><NavLink to={"/"}>Home</NavLink></li> 
             <li><NavLink to={"/lost-found"}>Lost and Found Items</NavLink></li> 
             <li><NavLink to={"/blogs"}>Blogs</NavLink></li> 
-            <li><NavLink to={"/aboutus"}>About Us</NavLink></li> 
+            <li><NavLink to={"/aboutus"}>About Us</NavLink></li>
+            <li className="md:hidden"><ThemeToggle /></li> 
           </ul>
         </div>
         <div className="flex justify-between items-center flex-row">
@@ -65,6 +67,7 @@ const Navbar = () => {
               <button className="btn border-2 border-primary text-primary hover:bg-neutral hover:border-primary ml-4" onClick={handleLogout}>Log out</button>
             </>
           )}
+          <ThemeToggle/>
           <Tooltip id="my-tooltip" />
       </div>
     </div>
