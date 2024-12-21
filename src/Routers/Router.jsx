@@ -9,6 +9,7 @@ import LostAndFound from "../Pages/LostAndFound";
 import BlogsPage from "../Pages/Blogs";
 import AboutUs from "../Pages/AboutUs";
 import AddPostPage from "../Pages/AddPostPage";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
     {
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "/addpost",
-                element: <AddPostPage/>
+                element: <PrivateRoute><AddPostPage/></PrivateRoute>
             }
         ]
     },
