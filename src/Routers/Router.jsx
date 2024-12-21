@@ -5,6 +5,10 @@ import AuthLayout from "../Layouts/AuthLayout";
 import LoginPage from "../Pages/LoginPage";
 import RegisterPage from "../Pages/RegisterPage";
 import ErrorPage from "../Pages/ErrorPage";
+import LostAndFound from "../Pages/LostAndFound";
+import BlogsPage from "../Pages/Blogs";
+import AboutUs from "../Pages/AboutUs";
+import AddPostPage from "../Pages/AddPostPage";
 
 const router = createBrowserRouter([
     {
@@ -14,6 +18,22 @@ const router = createBrowserRouter([
             {
                 path: "/",
                 element: <HomePage/>,
+            },
+            {
+                path: "/allItems",
+                element: <LostAndFound/>
+            }, 
+            {
+                path: "/blogs",
+                element: <BlogsPage/>
+            },
+            {
+                path: "/aboutus",
+                element: <AboutUs/>
+            },
+            {
+                path: "/addpost",
+                element: <AddPostPage/>
             }
         ]
     },
