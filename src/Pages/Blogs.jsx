@@ -6,4 +6,4 @@ const BlogsPage = () => {
     );
 };
 
-export default BlogsPage;
+export default BlogsPage;1
