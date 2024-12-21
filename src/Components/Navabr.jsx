@@ -1,13 +1,25 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Tooltip } from 'react-tooltip'
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import ThemeToggle from "./ThemeToggle";
+import AuthContext from "../context/AuthContext";
 
 
 
 const Navbar = () => {
-    const [user, setUser] = useState(null)
+    const { user, logOut } = useContext(AuthContext) 
+    const [mongoUser, setMongoUser] = useState(null);
+
+
+    const avatarURL = user?.photoURL || mongoUser?.photo || "https://via.placeholder.com/150";
+    const displayName = user?.displayName || mongoUser?.name || "User";
+
+    const handleLogout = () => {
+      logOut()
+          .then(() => console.log("Logged out successfully"))
+          .catch((error) => console.error("Error logging out:", error));
+  };
 
     return (
         <div className="navbar bg-base font-raleway text-primary w-11/12 mx-auto mt-4">
