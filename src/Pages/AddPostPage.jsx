@@ -1,219 +1,274 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { useState, useEffect, useContext } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Tooltip } from 'react-tooltip';
+import useAxiosSecure from '../hooks/UseAxiosSecure';
+import AuthContext from '../context/AuthContext';
 
-const AddPostPage = () => {
-  const { currentUser } = useContext(AuthContext); // Assuming AuthContext provides logged-in user details
+const Addpost = () => {
+  const { user } = useContext(AuthContext);
   const [formData, setFormData] = useState({
-    postType: "Lost",
-    thumbnail: null,
-    title: "",
-    description: "",
-    category: "",
-    location: "",
-    dateLost: new Date(),
+    image: '',
+    title: '',
+    postType: '',
+    description: '',
+    category: '',
+    location: '',
+    date: '',
+    minDonation: '',
+    deadline: '',
   });
-  const navigate = useNavigate();
+
+  const [userInfo, setUserInfo] = useState({
+    name: '',
+    email: '',
+  });
+
+  const axiosSecure = useAxiosSecure();
+
+  useEffect(() => {
+    if (user && (!user.displayName || !user.email)) {
+      axiosSecure
+        .get(`/users/${user.email}`)
+        .then((res) =>
+          setUserInfo({
+            name: res.data.name || 'Guest',
+            email: res.data.email,
+          })
+        )
+        .catch((error) =>
+          toast.error("Error fetching MongoDB user!", {
+            position: 'top-center',
+          })
+        );
+    } else if (user) {
+      setUserInfo({
+        name: user.displayName || 'Guest',
+        email: user.email,
+      });
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleThumbnailChange = (e) => {
-    setFormData((prev) => ({ ...prev, thumbnail: e.target.files[0] }));
-  };
-
-  const handleDateChange = (date) => {
-    setFormData((prev) => ({ ...prev, dateLost: date }));
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (
+      !formData.image ||
+      !formData.title ||
+      !formData.postType ||
+      !formData.description ||
+      !formData.category ||
+      !formData.location ||
+      !formData.date
+    ) {
+      toast.error('Please fill all fields before submitting.', {
+        position: 'top-center',
+      });
+      return;
+    }
 
     const postData = {
       ...formData,
-      dateLost: formData.dateLost.toISOString(),
-      contactInfo: {
-        name: currentUser?.displayName || "Anonymous",
-        email: currentUser?.email || "No email provided",
-      },
+      email: userInfo.email,
+      name: userInfo.name,
     };
 
-    const formDataToSend = new FormData();
-    for (const key in postData) {
-      if (key === "thumbnail") {
-        formDataToSend.append(key, postData[key]);
-      } else {
-        formDataToSend.append(key, JSON.stringify(postData[key]));
-      }
-    }
-
-    try {
-      const response = await fetch("https://your-backend-endpoint/items", {
-        method: "POST",
-        body: formDataToSend,
-      });
-
-      if (response.ok) {
-        toast.success("Post added successfully!", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+    axiosSecure
+      .post('/addItems', postData)
+      .then((res) => {
+        if (res.data.insertedId) {
+          toast.success('Post Added Successfully!', {
+            position: 'top-center',
+          });
+          setFormData({
+            image: '',
+            title: '',
+            postType: '',
+            description: '',
+            category: '',
+            location: '',
+            date: '',
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error('Something went wrong. Please try again.', {
+          position: 'top-center',
         });
-        navigate("/"); // Redirect to another page after successful submission
-      } else {
-        throw new Error("Failed to add post");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error(`Error adding post: ${error.message}`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
       });
-    }
   };
 
+
   return (
-    <div className="max-w-3xl  mx-auto p-6 shadow-md rounded-lg">
+    <form onSubmit={handleSubmit} className="card-body md:w-5/6 mx-auto my-12">
+      <h1 className="text-5xl font-extrabold text-center text-primary">Add post</h1>
+
+      {/* Image field */}
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text text-primary font-semibold">Image (URL)</span>
+        </label>
+        <input
+          name="image"
+          type="file"
+          accept="image/*"
+          className="input input-bordered placeholder-primary border-accent"
+          onChange={handleChange} // No value here
+          required
+        />
+      </div>
+
+      {/* post title field */}
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text text-primary font-semibold">Post Title</span>
+        </label>
+        <input
+          name="title"
+          type="text"
+          placeholder="Enter post title"
+          className="input input-bordered placeholder-primary border-accent"
+          value={formData.title}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      {/* post type dropdown */}
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text text-primary font-semibold">post Type</span>
+        </label>
+        <select
+          name="postType"
+          className="select select-bordered"
+          value={formData.postType}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Select type</option>
+          <option value="lost">Lost</option>
+          <option value="found">Found</option>
+        </select>
+      </div>
+
+      {/* Description field */}
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text text-primary font-semibold">Description</span>
+        </label>
+        <textarea
+          name="description"
+          placeholder="Enter post description"
+          className="textarea textarea-bordered placeholder-primary border-accent"
+          value={formData.description}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      {/* Category field */}
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text text-primary font-semibold">Category</span>
+        </label>
+        <select
+          name="category"
+          className="select select-bordered"
+          value={formData.category}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Select category</option>
+          <option value="documents">Documents</option>
+          <option value="gadgets">Gadgets</option>
+          <option value="pet">Pet</option>
+          <option value="bosuok">Book</option>
+          <option value="book">Others</option>
+        </select>
+      </div>
+
+      {/* Location field */}
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text text-primary font-semibold">Location</span>
+        </label>
+        <input
+          name="location"
+          type="text"
+          placeholder="Enter the location where it was lost/found"
+          className="input input-bordered placeholder-primary border-accent"
+          value={formData.location}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      {/* Date lost/found field */}
+      <div className="form-control">
+        <label className="label">
+          <span
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Please choose the correct date for accuracy."
+            className="label-text text-primary font-semibold underline"
+          >
+            Date Lost/Found
+          </span>
+        </label>
+        <input
+          name="date"
+          type="date"
+          className="input input-bordered placeholder-primary border-accent"
+          value={formData.date}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+
+      {/* User email (read-only) */}
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text text-primary font-semibold">Your Email</span>
+        </label>
+        <input
+          type="email"
+          value={userInfo.email}
+          className="input input-bordered placeholder-primary border-accent"
+          readOnly
+        />
+      </div>
+
+      {/* User name (read-only) */}
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text text-primary font-semibold">Your Name</span>
+        </label>
+        <input
+          type="text"
+          value={userInfo.name}
+          className="input input-bordered placeholder-primary border-accent"
+          readOnly
+        />
+      </div>
+
+      {/* Add button */}
+      <div className="form-control mt-6">
+        <button className="btn btn-primary text-[#FFDEB6]">Add post</button>
+      </div>
+      <Tooltip id="my-tooltip" />
       <ToastContainer />
-      <h1 className="text-3xl font-bold mb-6 text-center">Add Lost/Found Post</h1>
-      <form onSubmit={handleSubmit}>
-        {/* Post Type */}
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Post Type</label>
-          <select
-            name="postType"
-            value={formData.postType}
-            onChange={handleChange}
-            className="input input-bordered w-full"
-          >
-            <option value="Lost">Lost</option>
-            <option value="Found">Found</option>
-          </select>
-        </div>
-
-        {/* Thumbnail */}
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Thumbnail</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleThumbnailChange}
-            className="input input-bordered w-full"
-            required
-          />
-        </div>
-
-        {/* Title */}
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Title</label>
-          <input
-            name="title"
-            type="text"
-            value={formData.title}
-            onChange={handleChange}
-            placeholder="Enter a descriptive title"
-            className="input input-bordered w-full"
-            required
-          />
-        </div>
-
-        {/* Description */}
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="Provide detailed information about the item"
-            className="textarea textarea-bordered w-full"
-            required
-          />
-        </div>
-
-        {/* Category */}
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Category</label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="input input-bordered w-full"
-            required
-          >
-            <option value="">Select a category</option>
-            <option value="Pets">Pets</option>
-            <option value="Documents">Documents</option>
-            <option value="Gadgets">Gadgets</option>
-            <option value="Others">Others</option>
-          </select>
-        </div>
-
-        {/* Location */}
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Location</label>
-          <input
-            name="location"
-            type="text"
-            value={formData.location}
-            onChange={handleChange}
-            placeholder="Enter the location where the item was lost"
-            className="input input-bordered w-full"
-            required
-          />
-        </div>
-
-        {/* Date Lost */}
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Date Lost</label>
-          <DatePicker
-            selected={formData.dateLost}
-            onChange={handleDateChange}
-            dateFormat="yyyy-MM-dd"
-            className="input input-bordered w-full"
-          />
-        </div>
-
-        {/* Contact Info (Read-Only) */}
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Contact Information</label>
-          <input
-            type="text"
-            value={currentUser?.displayName || "Anonymous"}
-            className="input input-bordered w-full mb-2"
-            readOnly
-          />
-          <input
-            type="email"
-            value={currentUser?.email || "No email provided"}
-            className="input input-bordered w-full"
-            readOnly
-          />
-        </div>
-
-        {/* Submit Button */}
-        <div className="mt-6">
-          <button type="submit" className="btn btn-primary w-full">
-            Add Post
-          </button>
-        </div>
-      </form>
-    </div>
+    </form>
   );
 };
 
-export default AddPostPage;
+export default Addpost;

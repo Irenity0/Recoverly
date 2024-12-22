@@ -91,9 +91,9 @@ const Navbar = () => {
                                 <li><Link to="/myitems">Manage My Items</Link></li>
                             </ul>
                         </div>
+                        <button className="mr-4 btn border-2 border-primary text-primary hover:bg-neutral hover:border-primary" onClick={handleLogout}>Log out</button>
                     </>
                 )}
-                <button className="btn border-2 border-primary text-primary hover:bg-neutral hover:border-primary" onClick={handleLogout}>Log out</button>
                 <ThemeToggle />
                 <Tooltip id="my-tooltip" />
             </div>
