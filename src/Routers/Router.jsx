@@ -33,7 +33,7 @@ const router = createBrowserRouter([
                 element: <AboutUs/>
             },
             {
-                path: "/addpost",
+                path: "/additem",
                 element: <PrivateRoute><AddPostPage/></PrivateRoute>
             }
         ]

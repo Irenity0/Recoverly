@@ -53,7 +53,7 @@ const HowItWorks = () => {
               </motion.div>
             </div>
             <div className="mt-12">
-              <Link to="/post" className="btn bg-primary text-neutral font-semibold px-8 py-4 rounded hover:bg-secondary">Get Started</Link>
+              <Link to="/allitems" className="btn bg-primary text-neutral font-semibold px-8 py-4 rounded hover:bg-secondary">Get Started</Link>
             </div>
           </div>
         </div>

@@ -86,7 +86,7 @@ const Navbar = () => {
                             </button>
                             {/* Dropdown content */}
                             <ul className="menu dropdown-content bg-base-100 rounded-box z-[99] w-52 p-2 shadow">
-                                <li><Link to="/addpost">Add Lost & Found Item</Link></li>
+                                <li><Link to="/additem">Add Lost & Found Item</Link></li>
                                 <li><Link to="/recovereditems">Recovered Items</Link></li>
                                 <li><Link to="/myitems">Manage My Items</Link></li>
                             </ul>

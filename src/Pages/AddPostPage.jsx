@@ -14,9 +14,7 @@ const Addpost = () => {
     description: '',
     category: '',
     location: '',
-    date: '',
-    minDonation: '',
-    deadline: '',
+    date: ''
   });
 
   const [userInfo, setUserInfo] = useState({
@@ -38,7 +36,7 @@ const Addpost = () => {
         )
         .catch((error) =>
           toast.error("Error fetching MongoDB user!", {
-            position: 'top-center',
+            position: 'top-right',
           })
         );
     } else if (user) {
@@ -70,7 +68,7 @@ const Addpost = () => {
       !formData.date
     ) {
       toast.error('Please fill all fields before submitting.', {
-        position: 'top-center',
+        position: 'top-right',
       });
       return;
     }
@@ -82,11 +80,11 @@ const Addpost = () => {
     };
 
     axiosSecure
-      .post('/addItems', postData)
+      .post('/posts', postData)
       .then((res) => {
         if (res.data.insertedId) {
           toast.success('Post Added Successfully!', {
-            position: 'top-center',
+            position: 'top-right',
           });
           setFormData({
             image: '',
@@ -102,7 +100,7 @@ const Addpost = () => {
       .catch((error) => {
         console.error(error);
         toast.error('Something went wrong. Please try again.', {
-          position: 'top-center',
+          position: 'top-right',
         });
       });
   };
@@ -119,10 +117,11 @@ const Addpost = () => {
         </label>
         <input
           name="image"
-          type="file"
-          accept="image/*"
+          type="url"
+          placeholder="Enter image"
           className="input input-bordered placeholder-primary border-accent"
-          onChange={handleChange} // No value here
+          value={formData.image}
+          onChange={handleChange}
           required
         />
       </div>
