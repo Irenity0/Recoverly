@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useAxiosSecure from "../hooks/UseAxiosSecure";
 import { Link } from "react-router-dom";
+import Loading from "../Components/Loading";
 
 const LostAndFound = () => {
   const [posts, setPosts] = useState([]); 
@@ -21,7 +22,7 @@ const LostAndFound = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading posts...</p>; 
+    return <Loading/>; 
   }
 
   return (
@@ -40,7 +41,7 @@ const LostAndFound = () => {
               <p><span className="font-semibold">Category</span> {post.category}</p>              
               <p><span className="font-semibold">Date found/lost:</span> {post.date}</p>
               <p>Location: {post.location}</p>
-              <Link to={'/posts/:id'} className="btn btn-primary">Details</Link>
+              <Link to={`/items/${post._id}`} className="btn btn-primary">Details</Link>
             </div>
           </div>
         ))}

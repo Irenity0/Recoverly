@@ -10,6 +10,7 @@ import BlogsPage from "../Pages/Blogs";
 import AboutUs from "../Pages/AboutUs";
 import AddPostPage from "../Pages/AddPostPage";
 import PrivateRoute from "./PrivateRoute";
+import DetailsPage from "../Pages/detailsPage";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,11 @@ const router = createBrowserRouter([
                 element: <LostAndFound/>
             }, 
             {
+                path: "/items/:id",
+                element: <PrivateRoute><DetailsPage/></PrivateRoute>,
+                loader: ({ params }) => fetch(`http://localhost:5000/posts/${params.id}`)
+            },
+            {
                 path: "/blogs",
                 element: <BlogsPage/>
             },
@@ -35,7 +41,7 @@ const router = createBrowserRouter([
             {
                 path: "/additem",
                 element: <PrivateRoute><AddPostPage/></PrivateRoute>
-            }
+            }, 
         ]
     },
     {
