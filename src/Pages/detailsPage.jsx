@@ -6,9 +6,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const DetailsPage = () => {
-  const post = useLoaderData();
+  const loadedPost = useLoaderData(); // Use `loadedPost` to avoid overwriting the `post` state.
   const { user } = useContext(AuthContext);
   const [mongoUser, setMongoUser] = useState(null);
+  const [post, setPost] = useState(loadedPost); // Create a local state for `post`.
   const [showModal, setShowModal] = useState(false);
   const [recoveredLocation, setRecoveredLocation] = useState("");
   const [recoveredDate, setRecoveredDate] = useState(new Date());
@@ -29,7 +30,7 @@ const DetailsPage = () => {
   const handleSubmit = () => {
     // Format the date to 'YYYY-MM-DD'
     const formattedDate = recoveredDate.toISOString().split("T")[0];
-  
+
     const recoveryDetails = {
       recoveredLocation,
       recoveredDate: formattedDate, // Use the formatted date
@@ -43,14 +44,36 @@ const DetailsPage = () => {
         status: "recovered", // Update the status to "recovered"
       },
     };
-  
+
     axiosSecure
       .post("/recoveries", recoveryDetails)
       .then((res) => {
         console.log("Recovery details submitted successfully:", res.data);
         setShowModal(false);
+
+        // Update the post status locally
+        setPost((prevPost) => ({
+          ...prevPost,
+          status: "recovered",
+        }));
       })
       .catch((error) => console.error("Error submitting recovery details:", error));
+
+    // Function to update the post status directly to 'recovered'
+    axiosSecure
+      .patch(`/posts/${post._id}`, { status: "recovered" })
+      .then((res) => {
+        console.log("Post status updated to 'recovered' successfully:", res.data);
+
+        // Ensure the local state is updated in case the post request is slower
+        setPost((prevPost) => ({
+          ...prevPost,
+          status: "recovered",
+        }));
+      })
+      .catch((error) => {
+        console.error("Error updating post status:", error);
+      });
   };
   
 
@@ -79,19 +102,9 @@ const DetailsPage = () => {
         </p>
         {/* Conditional Button */}
         {post.postType === "lost" ? (
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowModal(true)}
-          >
-            Found This!
-          </button>
+          <button className="btn btn-primary" disabled={post.status === "recovered"} onClick={() => setShowModal(true)}>Found This!</button>
         ) : post.postType === "found" ? (
-          <button
-            className="btn btn-secondary"
-            onClick={() => setShowModal(true)}
-          >
-            This is Mine!
-          </button>
+          <button className="btn btn-secondary" disabled={post.status === "recovered"}onClick={() => setShowModal(true)}> This is Mine!</button>
         ) : null}
       </div>
 
