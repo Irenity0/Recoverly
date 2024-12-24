@@ -24,6 +24,7 @@
     "react-toastify": "^11.0.2",
     "react-tooltip": "^5.28.0",
     "sort-by": "^1.2.0",
+    "sweetalert2": "^11.15.3",
     "swiper": "^11.1.15"
   },
   "devDependencies": {
