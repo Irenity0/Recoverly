@@ -11,6 +11,7 @@ import AboutUs from "../Pages/AboutUs";
 import AddPostPage from "../Pages/AddPostPage";
 import PrivateRoute from "./PrivateRoute";
 import DetailsPage from "../Pages/detailsPage";
+import RecoveriesPage from "../Pages/RecoveriesPage";
 
 const router = createBrowserRouter([
     {
@@ -42,6 +43,11 @@ const router = createBrowserRouter([
                 path: "/additem",
                 element: <PrivateRoute><AddPostPage/></PrivateRoute>
             }, 
+            {
+                path: '/recoveredItems',
+                element: <RecoveriesPage/>,
+                loader: ({ params }) => fetch(`http://localhost:5000/recoveries`)
+            }
         ]
     },
     {
