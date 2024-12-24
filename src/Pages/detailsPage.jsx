@@ -27,17 +27,23 @@ const DetailsPage = () => {
 
   // Handle form submission
   const handleSubmit = () => {
+    // Format the date to 'YYYY-MM-DD'
+    const formattedDate = recoveredDate.toISOString().split("T")[0];
+  
     const recoveryDetails = {
       recoveredLocation,
-      recoveredDate,
+      recoveredDate: formattedDate, // Use the formatted date
       recoveredBy: {
         name: user?.displayName || mongoUser?.name,
         email: user?.email || mongoUser?.email,
         image: avatarURL,
       },
-      postId: post._id,
+      post: {
+        ...post,
+        status: "recovered", // Update the status to "recovered"
+      },
     };
-
+  
     axiosSecure
       .post("/recoveries", recoveryDetails)
       .then((res) => {
@@ -46,6 +52,7 @@ const DetailsPage = () => {
       })
       .catch((error) => console.error("Error submitting recovery details:", error));
   };
+  
 
   return (
     <>
@@ -91,7 +98,7 @@ const DetailsPage = () => {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 flex justify-center items-center" onClick={() => setShowModal(false)}>
-          <div className="bg-white p-6 rounded-md w-[400px] relative" onClick={(e) => e.stopPropagation()} >
+          <div className="bg-black/80 p-6 rounded-md w-[400px] relative" onClick={(e) => e.stopPropagation()} >
             <h2 className="text-xl font-bold mb-4">Recovery Details</h2>
             <div className="mb-3">
               <label className="block font-medium mb-1">Recovered Location:</label>
@@ -121,7 +128,7 @@ const DetailsPage = () => {
                 />
                 <div>
                   <p>{user?.displayName || mongoUser?.name}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm">
                     {user?.email || mongoUser?.email}
                   </p>
                 </div>
