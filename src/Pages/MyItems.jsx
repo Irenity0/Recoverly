@@ -9,6 +9,7 @@ const MyPosts = () => {
   const posts = useLoaderData();
   const [loadedPosts, setLoadedPosts] = useState(posts);
   const axiosSecure = useAxiosSecure();
+  console.log(posts)
 
   console.log(posts);
 
@@ -65,7 +66,7 @@ const MyPosts = () => {
               <tr key={post._id}>
                 <td>{index + 1}</td>
                 <td className="underline font-bold">
-                  <Link to={`/posts/${post._id}`}>{post.title}</Link>
+                  <Link to={`/items/${post._id}`}>{post.title}</Link>
                 </td>
                 <td>{post.category}</td>
                 <td>{post.date}</td>
@@ -73,7 +74,7 @@ const MyPosts = () => {
                 <td>{post.author}</td>
                 <td>
                   <button className="btn text-blue-500 rounded-xl">
-                    <Link to={`/updatepost/${post._id}`}>Update</Link>
+                    <Link to={`/updateItem/${post._id}`}>Update</Link>
                   </button>
                 </td>
                 <td>
@@ -83,6 +84,7 @@ const MyPosts = () => {
                   >
                     Delete
                   </button>
+                  <h2>{post._id}</h2>
                 </td>
               </tr>
             ))}

@@ -13,6 +13,7 @@ import PrivateRoute from "./PrivateRoute";
 import DetailsPage from "../Pages/detailsPage";
 import RecoveriesPage from "../Pages/RecoveriesPage";
 import MyPosts from "../Pages/MyItems";
+import UpdatePost from "../Pages/UpdatePost";
 
 const router = createBrowserRouter([
     {
@@ -53,6 +54,11 @@ const router = createBrowserRouter([
                 path: '/myitems',
                 element: <MyPosts/>,
                 loader: () => fetch(`http://localhost:5000/posts`)
+            },
+            {
+                path: '/updateItem/:id',
+                element: <UpdatePost/>,
+                loader: ({ params }) => fetch(`http://localhost:5000/posts/${params.id}`)
             }
         ]
     },
