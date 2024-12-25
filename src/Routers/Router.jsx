@@ -24,17 +24,18 @@ const router = createBrowserRouter([
             {
                 path: "/",
                 element: <HomePage/>,
-                loader: () => fetch('http://localhost:5000/posts')
+                loader: () => fetch('http://localhost:5000/posts/public')
             },
             {
                 path: "/allItems",
                 element: <LostAndFound/>
             }, 
             {
+        
                 path: "/items/:id",
-                element: <PrivateRoute><DetailsPage/></PrivateRoute>,
-                // loader: ({ params }) => fetch(`http://localhost:5000/posts/${params.id}`)
-                loader: ({params}) => axios.get(`http://localhost:5000/posts/${params.id}`, { withCredentials: true })
+                element: <PrivateRoute><DetailsPage/></PrivateRoute>
+                
+                  
             },
             {
                 path: "/blogs",
@@ -50,18 +51,18 @@ const router = createBrowserRouter([
             }, 
             {
                 path: '/recoveredItems',
-                element: <PrivateRoute><RecoveriesPage/></PrivateRoute>,
-                loader: () => fetch(`http://localhost:5000/recoveries`)
-            },
+                element: <PrivateRoute><RecoveriesPage/></PrivateRoute>            },
             {
                 path: '/myitems',
                 element: <PrivateRoute><MyPosts/></PrivateRoute>,
-                loader: () => fetch(`http://localhost:5000/posts`)
+                loader: () => axios.get(`http://localhost:5000/posts`, { withCredentials: true })
+                // loader: () => fetch(`http://localhost:5000/posts`)
             },
             {
                 path: '/updateItem/:id',
                 element: <PrivateRoute><UpdatePost/></PrivateRoute>,
-                loader: ({ params }) => fetch(`http://localhost:5000/posts/${params.id}`)
+                // loader: ({ params }) => fetch(`http://localhost:5000/posts/${params.id}`)
+                loader: ({params}) => axios.get(`http://localhost:5000/posts/${params.id}`, { withCredentials: true })
             }
         ]
     },

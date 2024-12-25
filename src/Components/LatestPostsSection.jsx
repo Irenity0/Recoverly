@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 
 const LatestPostsSection = ({posts}) => {
   const currentDate = new Date();
+  console.log(posts)
 
   const latestPosts = posts
   .filter(post => new Date(post.date) <= currentDate) // Posts on or before current date
   .slice(0, 6);
-    console.log(posts)
 
   return (
     <div className="latest-posts">

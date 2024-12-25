@@ -7,11 +7,9 @@ import AuthContext from "../context/AuthContext";
 const MyPosts = () => {
   const { user } = useContext(AuthContext);
   const posts = useLoaderData();
-  const [loadedPosts, setLoadedPosts] = useState(posts);
+  const [loadedPosts, setLoadedPosts] = useState(posts.data);
   const axiosSecure = useAxiosSecure();
-  console.log(posts)
-
-  console.log(posts);
+  console.log(posts.data)
 
   // Filter posts based on the logged-in user's email
   const userPosts = loadedPosts.filter((post) => post.email === user?.email);
@@ -71,7 +69,7 @@ const MyPosts = () => {
                 <td>{post.category}</td>
                 <td>{post.date}</td>
                 <td>{post.email}</td>
-                <td>{post.author}</td>
+                <td>{post.name}</td>
                 <td>
                   <button className="btn text-blue-500 rounded-xl">
                     <Link to={`/updateItem/${post._id}`}>Update</Link>
@@ -84,7 +82,6 @@ const MyPosts = () => {
                   >
                     Delete
                   </button>
-                  <h2>{post._id}</h2>
                 </td>
               </tr>
             ))}

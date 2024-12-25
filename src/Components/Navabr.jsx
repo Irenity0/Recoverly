@@ -14,7 +14,7 @@ const Navbar = () => {
     useEffect(() => {
       if (user?.email) {
         axiosSecure
-          .get(`/users/${user.email}`)
+          .get(`/users/${user.email}`, { withCredentials: true })
           .then((res) => setMongoUser(res.data))
           .catch((error) => console.error("Error fetching MongoDB user:", error));
       }

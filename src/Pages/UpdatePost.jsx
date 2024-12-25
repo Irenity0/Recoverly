@@ -6,9 +6,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const UpdatePost = () => {
-  const post = useLoaderData(); // Get existing data to pre-fill fields
+  const loadedPost = useLoaderData();
+  const post = loadedPost.data  // Get existing data to pre-fill fields
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
+  console.log(loadedPost.data);
 
   const [formData, setFormData] = useState({
     image: "",
