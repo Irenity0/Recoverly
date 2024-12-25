@@ -24,7 +24,7 @@ const router = createBrowserRouter([
             {
                 path: "/",
                 element: <HomePage/>,
-                loader: () => fetch('http://localhost:5000/posts/public')
+                loader: () => fetch('https://recoverly-server.vercel.app/posts/public')
             },
             {
                 path: "/allItems",
@@ -51,18 +51,19 @@ const router = createBrowserRouter([
             }, 
             {
                 path: '/recoveredItems',
-                element: <PrivateRoute><RecoveriesPage/></PrivateRoute>            },
+                element: <PrivateRoute><RecoveriesPage/></PrivateRoute>            
+            },
             {
                 path: '/myitems',
                 element: <PrivateRoute><MyPosts/></PrivateRoute>,
-                loader: () => axios.get(`http://localhost:5000/posts`, { withCredentials: true })
-                // loader: () => fetch(`http://localhost:5000/posts`)
+                loader: () => axios.get(`https://recoverly-server.vercel.app/posts`, { withCredentials: true })
+                // loader: () => fetch(`https://recoverly-server.vercel.app/posts`)
             },
             {
                 path: '/updateItem/:id',
                 element: <PrivateRoute><UpdatePost/></PrivateRoute>,
-                // loader: ({ params }) => fetch(`http://localhost:5000/posts/${params.id}`)
-                loader: ({params}) => axios.get(`http://localhost:5000/posts/${params.id}`, { withCredentials: true })
+                // loader: ({ params }) => fetch(`https://recoverly-server.vercel.app/posts/${params.id}`)
+                loader: ({params}) => axios.get(`https://recoverly-server.vercel.app/posts/${params.id}`, { withCredentials: true })
             }
         ]
     },

@@ -13,7 +13,7 @@ const LostAndFound = () => {
   // Fetch posts data when the component is mounted
   useEffect(() => {
     axiosSecure
-      .get("/posts", { withCredentials: true })
+      .get("/posts/public")
       .then((res) => {
         setPosts(res.data);
         setLoading(false);
