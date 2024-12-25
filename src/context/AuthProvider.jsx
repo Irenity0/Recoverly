@@ -9,6 +9,7 @@ import {
   signInWithPopup,
   signOut,
 } from "firebase/auth";
+import axios from "axios";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -82,10 +83,27 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // Persist user info in localStorage (optional)
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      console.log('state captured', currentUser?.email)
+      if (currentUser?.email){
+        const user = { email: currentUser?.email }
+
+        axios.post('http://localhost:5000/jwt', user, { withCredentials: true })
+        .then(res => {
+          console.log(`login`, res.data)
+          setLoading(false)
+        })
+      }
+
+      else {
+        axios.post('http://localhost:5000/logout', {}, { withCredentials: true })
+        .then(res => {
+          console.log(`logout`, res.data)
+          setLoading(false)
+        })
+      }
       setLoading(false);
     });
 

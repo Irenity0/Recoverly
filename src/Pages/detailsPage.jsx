@@ -9,18 +9,19 @@ const DetailsPage = () => {
   const loadedPost = useLoaderData(); // Use `loadedPost` to avoid overwriting the `post` state.
   const { user } = useContext(AuthContext);
   const [mongoUser, setMongoUser] = useState(null);
-  const [post, setPost] = useState(loadedPost); // Create a local state for `post`.
+  const [post, setPost] = useState(loadedPost.data); // Create a local state for `post`.
   const [showModal, setShowModal] = useState(false);
   const [recoveredLocation, setRecoveredLocation] = useState("");
   const [recoveredDate, setRecoveredDate] = useState(new Date());
   const avatarURL = user?.photoURL || mongoUser?.photo || "https://via.placeholder.com/150";
   const axiosSecure = useAxiosSecure();
+  console.log(loadedPost.data)
 
   // Fetch user details from MongoDB
   useEffect(() => {
     if (user?.email) {
       axiosSecure
-        .get(`/users/${user.email}`)
+        .get(`/users/${user.email}`, { withCredentials: true })
         .then((res) => setMongoUser(res.data))
         .catch((error) => console.error("Error fetching MongoDB user:", error));
     }
@@ -28,12 +29,11 @@ const DetailsPage = () => {
 
   // Handle form submission
   const handleSubmit = () => {
-    // Format the date to 'YYYY-MM-DD'
     const formattedDate = recoveredDate.toISOString().split("T")[0];
 
     const recoveryDetails = {
       recoveredLocation,
-      recoveredDate: formattedDate, // Use the formatted date
+      recoveredDate: formattedDate, 
       recoveredBy: {
         name: user?.displayName || mongoUser?.name,
         email: user?.email || mongoUser?.email,
@@ -41,7 +41,7 @@ const DetailsPage = () => {
       },
       post: {
         ...post,
-        status: "recovered", // Update the status to "recovered"
+        status: "recovered", 
       },
     };
 

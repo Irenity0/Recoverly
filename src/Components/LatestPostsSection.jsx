@@ -1,17 +1,14 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import useAxiosSecure from "../hooks/UseAxiosSecure";
+// import useAxiosSecure from "../hooks/UseAxiosSecure";
 
-const LatestPostsSection = () => {
-  const [latestPosts, setLatestPosts] = useState([]);
-  const axiosSecure = useAxiosSecure();
+const LatestPostsSection = ({posts}) => {
+  const currentDate = new Date();
 
-  useEffect(() => {
-    axiosSecure
-      .get("/posts?sort=-date&limit=6")
-      .then((res) => setLatestPosts(res.data))
-      .catch((error) => console.error("Error fetching latest posts:", error));
-  }, []);
+  const latestPosts = posts
+  .filter(post => new Date(post.date) <= currentDate) // Posts on or before current date
+  .slice(0, 6);
+    console.log(posts)
 
   return (
     <div className="latest-posts">

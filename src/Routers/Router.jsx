@@ -14,6 +14,7 @@ import DetailsPage from "../Pages/detailsPage";
 import RecoveriesPage from "../Pages/RecoveriesPage";
 import MyPosts from "../Pages/MyItems";
 import UpdatePost from "../Pages/UpdatePost";
+import axios from "axios";
 
 const router = createBrowserRouter([
     {
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
             {
                 path: "/",
                 element: <HomePage/>,
+                loader: () => fetch('http://localhost:5000/posts')
             },
             {
                 path: "/allItems",
@@ -31,7 +33,8 @@ const router = createBrowserRouter([
             {
                 path: "/items/:id",
                 element: <PrivateRoute><DetailsPage/></PrivateRoute>,
-                loader: ({ params }) => fetch(`http://localhost:5000/posts/${params.id}`)
+                // loader: ({ params }) => fetch(`http://localhost:5000/posts/${params.id}`)
+                loader: ({params}) => axios.get(`http://localhost:5000/posts/${params.id}`, { withCredentials: true })
             },
             {
                 path: "/blogs",
@@ -47,17 +50,17 @@ const router = createBrowserRouter([
             }, 
             {
                 path: '/recoveredItems',
-                element: <RecoveriesPage/>,
+                element: <PrivateRoute><RecoveriesPage/></PrivateRoute>,
                 loader: () => fetch(`http://localhost:5000/recoveries`)
             },
             {
                 path: '/myitems',
-                element: <MyPosts/>,
+                element: <PrivateRoute><MyPosts/></PrivateRoute>,
                 loader: () => fetch(`http://localhost:5000/posts`)
             },
             {
                 path: '/updateItem/:id',
-                element: <UpdatePost/>,
+                element: <PrivateRoute><UpdatePost/></PrivateRoute>,
                 loader: ({ params }) => fetch(`http://localhost:5000/posts/${params.id}`)
             }
         ]
