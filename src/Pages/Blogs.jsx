@@ -1,7 +1,7 @@
 const BlogsPage = () => {
     return (
         <>
-        <h2>all blogs desu</h2>
+        <h2 className="text-8xl font-extrabold text-center">Coming Soon!</h2>
         </>
     );
 };
