@@ -7,8 +7,9 @@ const RootLayout = () => {
     return (
         <>
         <DynamicTitle />
+        <Navbar/>
         <div className="w-11/12 mx-auto space-y-14">
-            <Navbar/>
+            <br />
             <Outlet/>
             <Footer/>
         </div>

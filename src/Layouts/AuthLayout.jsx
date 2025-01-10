@@ -8,6 +8,9 @@ const AuthLayout = () => {
         <>
         <DynamicTitle />
         <Navbar/>
+       <section className="w-11/12 mx-auto">
+       </section>
+        <br />
         <Outlet/>
         <Footer/>
         </>
