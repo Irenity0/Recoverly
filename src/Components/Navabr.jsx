@@ -56,6 +56,7 @@ const Navbar = () => {
                     <li><NavLink to={"/allItems"}>Lost and Found Items</NavLink></li>
                     <li><NavLink to={"/blogs"}>Blogs</NavLink></li>
                     <li><NavLink to={"/aboutus"}>About Us</NavLink></li>
+                    <li><NavLink to={"/faq"}>FAQ</NavLink></li>
                     <li className="md:hidden"><ThemeToggle /></li>
                 </ul>
             </div>
@@ -70,6 +71,7 @@ const Navbar = () => {
                 <li><NavLink to={"/allItems"}>Lost and Found Items</NavLink></li>
                 <li><NavLink to={"/blogs"}>Blogs</NavLink></li>
                 <li><NavLink to={"/aboutus"}>About Us</NavLink></li>
+                <li><NavLink to={"/faq"}>FAQ</NavLink></li>
             </ul>
         </div>
         <div className="navbar-end hidden md:flex space-x-4 items-center">

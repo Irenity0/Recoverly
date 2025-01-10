@@ -8,10 +8,10 @@ const Info = () => {
               {/* Image on the left */}
               <div className="w-full lg:w-2/3 md:w-1/2 pl-0">
                 <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">About Recoverly</h2>
-                <p className="text-lg text-accent mb-6">
+                <p className="text-lg text-primary mb-6">
                   Recoverly is a dedicated platform that bridges the gap between individuals who have lost personal belongings and those who may have found them. By providing an easy-to-use interface, Recoverly simplifies the process of reporting, browsing, and recovering lost items.
                 </p>
-                <p className="text-lg text-accent">
+                <p className="text-lg text-primary">
                   Our mission is to create a community-driven solution for reconnecting people with their possessions. Whether you’ve misplaced something or stumbled upon an unclaimed item, Recoverly offers the tools to facilitate these connections securely and efficiently.
                 </p>
               </div>

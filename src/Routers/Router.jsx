@@ -15,6 +15,7 @@ import RecoveriesPage from "../Pages/RecoveriesPage";
 import MyPosts from "../Pages/MyItems";
 import UpdatePost from "../Pages/UpdatePost";
 import axios from "axios";
+import Faq from "../Components/FAQ";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
                 path: "/",
                 element: <HomePage/>,
                 loader: () => fetch('https://recoverly-server.vercel.app/posts/public')
+            },
+            {
+                path: '/faq',
+                element: <Faq/>
             },
             {
                 path: "/allItems",

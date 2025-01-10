@@ -13,7 +13,7 @@ const LatestPostsSection = ({posts}) => {
   return (
     <div className="latest-posts">
       <h2 className="text-4xl font-bold mb-8 text-primary text-center">Latest Find & Lost Items</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {latestPosts.map((post) => (
           <div key={post._id} className="post-card bg-secondary/30 rounded-xl p-4 space-y-3 shadow-2xl">
             <img src={post.image} alt={post.title} className="w-full h-48 object-cover mb-4 rounded"/>
